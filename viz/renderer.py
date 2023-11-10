@@ -221,7 +221,7 @@ class Renderer:
         self.pkl = pkl
         G = self.get_network(pkl, 'G_ema')
         self.G = G
-        res.img_resolution = G.img_resolution
+        res.img_resolution = G['img_resolution']
         res.num_ws = G.num_ws
         res.has_noise = any('noise_const' in name for name, _buf in G.synthesis.named_buffers())
         res.has_input_transform = (hasattr(G.synthesis, 'input') and hasattr(G.synthesis.input, 'transform'))
@@ -310,7 +310,7 @@ class Renderer:
         label = torch.zeros([1, G.c_dim], device=self._device)
         img, feat = G(ws, label, truncation_psi=trunc_psi, noise_mode=noise_mode, input_is_w=True, return_feature=True)
 
-        h, w = G.img_resolution, G.img_resolution
+        h, w = G['img_resolution'], G['img_resolution']
 
         if is_drag:
             X = torch.linspace(0, h, h)
